@@ -7,6 +7,8 @@ from dino_runner.utils.constants import (
         LARGE_CACTUS
         )
 from dino_runner.utils.constants import BIRD
+from dino_runner.components.obstacles.cactus import Cactus
+from dino_runner.utils.constants import SMALL_CACTUS
 
 class ObstacleManager:
 
@@ -23,17 +25,24 @@ class ObstacleManager:
                     self.obstacles.append(Bird(BIRD))
                 case 2:
                     self.obstacles.append(Cactus(LARGE_CACTUS))
-
+        if len(self.obstacles) ==  0:
+            self.obstacles.append(Cactus(SMALL_CACTUS))
         for obstacle in self.obstacles:
             obstacle.update(game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.shield:
-
                     pygame.time.delay(300)
                     game.playing = False
                     break
                 else:
                     self.obstacles.pop()
+
+    def draw(self, screen):
+        for obstacle in self.obstacles:
+            obstacle.draw(screen)
+            pygame.time.delay(300)
+            game.playing = False
+            break
 
     def draw(self, screen):
         for obstacle in self.obstacles:

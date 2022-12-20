@@ -28,6 +28,13 @@ class Game:
         self.points += 1
         if self.points % 100 == 0:
             self.game_speed += 1
+        
+        print(self.points)
+
+    def score(self):
+        self.points += 1
+        if self.points % 100 == 0:
+            self.game_speed += 1
 
         print(self.points)
 
@@ -53,6 +60,7 @@ class Game:
         self.power_up_manager.update(self.points, self.game_speed, self.player)
         self.score()
         self.player.check_invincibility()
+        self.score()
 
     def draw(self):
         self.clock.tick(FPS)
