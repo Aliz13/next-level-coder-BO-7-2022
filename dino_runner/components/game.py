@@ -1,9 +1,10 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, GO, RE, CLOUD
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -15,7 +16,9 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
-
+    
+        self.x_pos_cloud = 200
+        self.y_pos_cloud = 100
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.points = 0
@@ -29,12 +32,13 @@ class Game:
         print(self.points)
 
     def run(self):
-        
+
         self.playing = True
         while self.playing:
             self.events()
             self.update()
             self.draw()
+        self.game_over()
         pygame.quit()
 
     def events(self):
@@ -60,6 +64,13 @@ class Game:
         pygame.display.update()
         pygame.display.flip()
 
+    def game_over(self):
+        self.screen.fill((0,0,1))
+        self.screen.blit(GO,[350, 255])
+        self.screen.blit(RE, [510, 315])
+        pygame.display.update()
+        pygame.time.wait(10000)
+
     def draw_background(self):
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
@@ -68,3 +79,12 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+        image_cloud = CLOUD.get_width()
+        self.screen.blit(CLOUD, (self.x_pos_cloud, self.y_pos_cloud))
+        self.screen.blit(CLOUD, (image_cloud + self.x_pos_cloud, self.y_pos_cloud))
+        if self.x_pos_cloud <= -image_cloud:
+            self.screen.blit(CLOUD, (image_cloud + self.x_pos_cloud, self.y_pos_cloud))
+            self.x_pos_bg = 0
+        self.x_pos_bg -= self.game_speed
+    
